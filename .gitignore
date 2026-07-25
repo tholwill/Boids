@@ -1,0 +1,13 @@
+# Complied Executables and Objects
+*.exe
+*.o
+*.out
+fish_school
+
+# Local build folder and downloaded dependencies
+raylib/
+build/
+
+# OS related
+.DS_Store
+Thumbs.db
