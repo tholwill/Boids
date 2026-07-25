@@ -2,6 +2,18 @@
 
 An implementation of the boids artificial life algorithm written in C using **RayLib**
 
+---
+
+# Background
+Boids was developed by Craig Reynolds as an artificial life algorithm to simulate the flocking of birds, however it can be applied to other life such as fish. The algorithm has 3 primary components:
+ - Separation:
+    Avoid other boids that get too close
+ - Alignment
+    Travel in the same direction as other nearby boids
+ - Cohesion
+    Travel towards the centre of mass of other nearby boids
+Since its original development in 1986, the basic model has been extended, however this implementation does not follow any additional rules.
+
 ## Requirements
  * Raylib 5.0+
  * GCC / MinGW-w64
