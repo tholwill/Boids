@@ -20,9 +20,41 @@ Since its original development in 1986, the basic model has been extended, howev
 
 ## Building
 
+#### Clone the repository
+
+```bash
+git clone https://github.com/tholwill/Boids.git
+cd Boids
+git clone https://github.com/raysan5/raylib.git
+```
+
 ### Linux
+#### Build raylib
+```bash
+cd raylib/src
+make
+cd ../..
+```
+
+#### Build boids
 ```bash
 make
-./fish_school
+./boids
+```
+
+---
+
+### Windows
+#### Build raylib
+```bash'
+cd raylib/src
+mingw32-make
+cd ../..
+```
+
+#### Build boids
+```bash
+mingw32-make win
+.\boids.exe
 ```
 
