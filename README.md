@@ -1,4 +1,4 @@
-# Schooling Fish Simulation
+# Artificial Life Simulation
 
 An implementation of the boids artificial life algorithm written in C using **RayLib**
 
