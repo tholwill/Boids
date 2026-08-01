@@ -4,6 +4,10 @@ An implementation of the boids artificial life algorithm written in C using **Ra
 
 ---
 
+<img width="910" height="661" alt="Boids" src="https://github.com/user-attachments/assets/9d9c63fd-3763-4507-9015-7825f921324a" />
+
+---
+
 # Background
 Boids was developed by Craig Reynolds as an artificial life algorithm to simulate the flocking of birds, however it can be applied to other life such as fish. The algorithm has 3 primary components:
  - Separation:
