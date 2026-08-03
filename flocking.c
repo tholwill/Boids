@@ -2,59 +2,58 @@
 #include <math.h>
 #include "raylib.h"
 
-#define NUMFISH 80
+#define NUMBOIDS 80
 #define MAXSPEED 4
 #define MINSPEED 1
 #define MINSIZE 3
 #define MAXSIZE 6
 #define TURNFACTOR 0.4f //How much each boid wants to avoid the screen edge
 
-#define VISUAL 95   //Range to see other fish
-#define PROTECTED 15 //Range to avoid other fish
+#define VISUAL 95   //Range to see other boids
+#define PROTECTED 15 //Range to avoid other boids
 
 #define SEPARATION 0.05f //Parameter for separation
-#define ALIGNMENT 0.05f //Parameter for alignment
+#define ALIGNMENT 0.05f  //Parameter for alignment
 #define COHESION 0.0005f //Parameter for cohesion
 
-#define MARGIN 150 //How close to the screen edge they start being moved
+#define MARGIN 150 // How close to the screen edge they start being moved
 
-// Create a struct to store each fishes position, velocity, and size
+// Create a struct to store each boids position, velocity, and size
 typedef struct {
   Vector2 pos;
   Vector2 vel;
   int size;
-} fish;
+} boid;
 
-fish fishSchool[NUMFISH];
+boid allBoids[NUMBOIDS];
 
-void initFish(fish *f, int borderX, int borderY){
-f->pos.x = GetRandomValue(0,borderX);
-f->pos.y = GetRandomValue(0,borderY);
-f->vel.x = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
-f->vel.y = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
-f->size = GetRandomValue(MINSIZE, MAXSIZE);
+void initBoid(boid *b, int borderX, int borderY){
+b->pos.x = GetRandomValue(0,borderX);
+b->pos.y = GetRandomValue(0,borderY);
+b->vel.x = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
+b->vel.y = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
+b->size = GetRandomValue(MINSIZE, MAXSIZE);
 }
 
-void accelerateFish(fish *current, fish *school, int bX, int bY){
+void accelerateBoid(boid *current, boid *boids, int bX, int bY){
   Vector2 sep = {0,0};
   Vector2 ali = {0,0};
   Vector2 coh = {0,0};
 
   int neighbours = 0;
-  
-  //loop though all other fish
-  for(int i = 0; i < NUMFISH; i++){
-    fish* other = &school[i];
+ 
+  for(int i = 0; i < NUMBOIDS; i++){
+    boid* other = &boids[i];
     if(current == other) continue; //ignore self comparisson
  
-    //find distance to the comparing fish
+    //find distance to the comparing boid
     float dx = current->pos.x - other->pos.x;
     float dy = current->pos.y - other->pos.y;
 
     int distSquare = (dx * dx) + (dy * dy);  
 
     //Separation
-    //If the other fish is in the protected area, steer away
+    //If the other boid is in the protected area, steer away
     if (distSquare < PROTECTED * PROTECTED){
       sep.x += dx;
       sep.y += dy;
@@ -63,13 +62,13 @@ void accelerateFish(fish *current, fish *school, int bX, int bY){
     //Alignment and Cohesion
     if (distSquare < VISUAL * VISUAL){
       //Alignment
-      //swim in the same direction as other fish
+      //move in the same direction as other boid
       ali.x += other->vel.x;
       ali.y += other->vel.y;
       neighbours++;
 
       //Cohesion
-      //swim towards the centre of mass of the other fish
+      //move towards the centre of mass of the other boid
       coh.x += other->pos.x;
       coh.y += other->pos.y;
     }
@@ -118,7 +117,7 @@ void accelerateFish(fish *current, fish *school, int bX, int bY){
   if(speed < 0.001f){ //If the speed is effectively 0, accelerate them
     current->vel.x = GetRandomValue(-MAXSPEED,MAXSPEED);
     current->vel.y = GetRandomValue(-MAXSPEED,MAXSPEED);
-  } if (speed > MAXSPEED){ //Limit the speed if they are too fast
+  } if (speed > MAXSPEED){ //Limit the speed if boid is too fast
     current->vel.x = (current->vel.x)/speed * MAXSPEED;
     current->vel.y = (current->vel.y)/speed * MAXSPEED;
   } else if (speed < MINSPEED) { //Give them a minimum if they're too slow
@@ -127,43 +126,42 @@ void accelerateFish(fish *current, fish *school, int bX, int bY){
   }
 }
 
-void moveFish(fish *f, int borderX, int borderY){
-  // Move the position of the fish
-  f->pos.x += f->vel.x;
-  f->pos.y += f->vel.y;
+void moveBoid(boid *b, int borderX, int borderY){
+  b->pos.x += b->vel.x;
+  b->pos.y += b->vel.y;
 
   // Wraparound
-  if (f->pos.x < -f->size){
-    f->pos.x = borderX + f->size;
-  } else if (f->pos.x > borderX + f->size){
-    f->pos.x = -f->size;
+  if (b->pos.x < -b->size){
+    b->pos.x = borderX + b->size;
+  } else if (b->pos.x > borderX + b->size){
+    b->pos.x = -b->size;
   }
 
-  if (f->pos.y < -f->size){
-    f->pos.y = borderY + f->size;
-  } else if (f->pos.y > borderY + f->size){
-    f->pos.y = -f->size;
+  if (b->pos.y < -b->size){
+    b->pos.y = borderY + b->size;
+  } else if (b->pos.y > borderY + b->size){
+    b->pos.y = -b->size;
   }
 
 }
 
-void drawFish(fish *f){
-  DrawCircleV(f->pos, f->size, BLUE);
+void drawBoid(boid *b){
+  //change later for proper images
+  DrawCircleV(b->pos, b->size, BLUE);
 }
 
 int main(void){
   
-  // Assign the border size
   const int borderX = 950;
   const int borderY = 700;
 
-  // Create the fish
-  for (int i = 0; i < NUMFISH; i++){
-    initFish(&fishSchool[i], borderX, borderY);
+  // Create the boids
+  for (int i = 0; i < NUMBOIDS; i++){
+    initBoid(&allBoids[i], borderX, borderY);
   }
 
   // Create window with raylib
-  InitWindow(borderX, borderY, "Fish School!");
+  InitWindow(borderX, borderY, "Boids Simulation");
   SetTargetFPS(60);
 
   // Draw each frame
@@ -171,11 +169,11 @@ int main(void){
     BeginDrawing();
     ClearBackground(RAYWHITE);
     
-    // Accelerate, move, and draw fish
-    for(int i = 0; i < NUMFISH; i++){
-      accelerateFish(&fishSchool[i], fishSchool, borderX, borderY);
-      moveFish(&fishSchool[i], borderX, borderY);
-      drawFish(&fishSchool[i]);
+    // Accelerate, move, and draw boids
+    for(int i = 0; i < NUMBOIDS; i++){
+      accelerateBoid(&allBoids[i], allBoids, borderX, borderY);
+      moveBoid(&allBoids[i], borderX, borderY);
+      drawBoid(&allBoids[i]);
     } 
     EndDrawing();
   }

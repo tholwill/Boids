@@ -50,7 +50,7 @@ make
 
 ### Windows
 #### Build raylib
-```bash'
+```bash
 cd raylib/src
 mingw32-make
 cd ../..
