@@ -28,11 +28,11 @@ typedef struct {
 boid allBoids[NUMBOIDS];
 
 void initBoid(boid *b, int borderX, int borderY){
-b->pos.x = GetRandomValue(0,borderX);
-b->pos.y = GetRandomValue(0,borderY);
-b->vel.x = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
-b->vel.y = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
-b->size = GetRandomValue(MINSIZE, MAXSIZE);
+  b->pos.x = GetRandomValue(0,borderX);
+  b->pos.y = GetRandomValue(0,borderY);
+  b->vel.x = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
+  b->vel.y = GetRandomValue(-1 * MAXSPEED,MAXSPEED);
+  b->size = GetRandomValue(MINSIZE, MAXSIZE);
 }
 
 void accelerateBoid(boid *current, boid *boids, int bX, int bY){
